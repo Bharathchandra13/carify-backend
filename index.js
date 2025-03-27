@@ -1033,52 +1033,9 @@ app.post("/api/bookingcps/delete/:id", async (req, res) => {
 });
 
 
-// ✅ Publish a Full Car Ride
-app.post("/api/publish", upload.none(), async (req, res) => {
-    try {
-        const { name, contact, route_from, route_to, date, time, carType } = req.body;
-
-        // 🛑 Validate request data
-        if (!name || !contact || !route_from || !route_to || !date || !time || !carType) {
-            return res.status(400).json({
-                status: false,
-                message: "All fields are required!",
-                data: {}
-            });
-        }
-
-        // 🎯 Determine seat capacity based on car type
-        const seats = carType === "5-seater" ? 5 : 7;
-
-        // 🆕 Create new ride entry
-        const newRide = new Ridefull({
-            name,
-            contact,
-            route: { from: route_from, to: route_to },
-            date,
-            time,
-            carType,
-            seatsAvailable: seats,
-            fullCapacity: true
-        });
-
-        await newRide.save();
-
-
-    } catch (error) {
-        console.error("❌ Error while publishing ride:", error);
-        res.status(500).json({
-            status: false,
-            message: "Server error while publishing ride",
-            data: { error: error.message }
-        });
-    }
-});
-
-
-
+/
 // Create a new ride
-app.post("/api/rides", async (req, res) => {
+app.post("/api/publish", async (req, res) => {
     try {
         const ride = new Ride(req.body);
         await ride.save();
