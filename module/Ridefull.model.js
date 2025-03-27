@@ -1,18 +1,12 @@
 const mongoose = require("mongoose");
 
-const RideFullSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    contact: { type: String, required: true },
-    route: {
-        from: { type: String, required: true },
-        to: { type: String, required: true }
-    },
-    date: { type: String, required: true },
-    time: { type: String, required: true },
-    carType: { type: String, required: true },
-    seatsAvailable: { type: Number, required: true },
-    fullCapacity: { type: Boolean, default: true }
-});
+const rideSchema = new mongoose.Schema({
+    leavingFrom: { type: String, required: true },
+    goingTo: { type: String, required: true },
+    selectedDate: { type: Date, required: true },
+    vehicleType: { type: String, required: true },
+}, { timestamps: true });
 
-const RideFull = mongoose.model("RideFull", RideFullSchema);
-module.exports = RideFull; // Ensure it's exported
+const Ride = mongoose.model("Ride", rideSchema);
+
+module.exports = Ride;
