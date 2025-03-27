@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const CarpoolSchema = new mongoose.Schema({
-    driver: { type: String, required: true },
     route: {
         from: { type: String, required: true },
         to: { type: String, required: true }
