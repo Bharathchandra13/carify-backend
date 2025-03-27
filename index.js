@@ -1076,36 +1076,49 @@ app.post("/api/publish", upload.none(), async (req, res) => {
 });
 
 
-// ✅ Get All Full Car Rides
-app.get("/api/rides", async (req, res) => {
+
+// Create a new ride
+app.post("/api/rides", async (req, res) => {
     try {
-        console.log("🔹 Fetching all full car rides...");
-        const rides = await Ridefull.find();
-
-        if (rides.length === 0) {
-            return res.status(404).json({
-                status: false,
-                message: "No full car rides found",
-                data: []
-            });
-        }
-
-        res.status(200).json({
-            status: true,
-            message: "✅ Full car rides retrieved successfully",
-            data: rides
-        });
-
-    } catch (error) {
-        console.error("❌ Error fetching full car rides:", error);
-        res.status(500).json({
-            status: false,
-            message: "Server error while fetching full car rides",
-            data: { error: error.message }
-        });
+        const ride = new Ride(req.body);
+        await ride.save();
+        res.status(201).json(ride);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
 });
 
+// Get all rides
+app.get("/api/rides", async (req, res) => {
+    try {
+        const rides = await Ride.find();
+        res.json(rides);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get a ride by ID
+app.get("/api/rides/:id", async (req, res) => {
+    try {
+        const ride = await Ride.findById(req.params.id);
+        if (!ride) return res.status(404).json({ message: "Ride not found" });
+        res.json(ride);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete a ride
+app.delete("/api/rides/:id", async (req, res) => {
+    try {
+        const ride = await Ride.findByIdAndDelete(req.params.id);
+        if (!ride) return res.status(404).json({ message: "Ride not found" });
+        res.json({ message: "Ride deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // ✅ Get Full Capacity Rides
 // ✅ Get Full-Capacity Carpools
