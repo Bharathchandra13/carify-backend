@@ -720,11 +720,11 @@ app.post("/api/carpool", upload.none(), async (req, res) => {
     try {
         console.log("Received Data:", req.body);
 
-        const { driver, seatsAvailable, date, time, contact, route } = req.body;
+        const {seatsAvailable, date, time, contact, route } = req.body;
         const from = route?.from;
         const to = route?.to;
 
-        if (!driver || !seatsAvailable || !from || !to || !date || !time || !contact) {
+        if (!seatsAvailable || !from || !to || !date || !time || !contact) {
             return res.status(400).json({
                 status: false,
                 message: "All fields are required",
@@ -733,7 +733,6 @@ app.post("/api/carpool", upload.none(), async (req, res) => {
         }
 
         const newCarpool = new Carpool({ 
-            driver, 
             seatsAvailable, 
             route: { from, to }, 
             date, 
@@ -749,7 +748,6 @@ app.post("/api/carpool", upload.none(), async (req, res) => {
             data: [
                 {
                     id: newCarpool._id,
-                    driver: newCarpool.driver,
                     seatsAvailable: newCarpool.seatsAvailable,
                     from: newCarpool.route.from,
                     to: newCarpool.route.to,
